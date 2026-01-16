@@ -72,6 +72,19 @@ pipeline {
             steps {
                 sh 'npx playwright test'
             }
+            post {
+                always {
+                    publishHTML(target: [
+                        allowMissing: true,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: 'reports-e2e/html/',
+                        reportFiles: 'index.html',
+                        reportName: 'Playwright E2E Test Report'
+                    ])
+                    junit stdioRetention: 'ALL', testResults: 'reports-e2e/junit.xml'
+                }
+            }
         }
     }
 }
